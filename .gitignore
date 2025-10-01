@@ -1,0 +1,29 @@
+# Byte-compiled / cache files
+__pycache__/
+*.py[cod]
+*.pyo
+
+
+# SQLite database
+db.sqlite3
+
+# Logs
+*.log
+
+# Django specific
+*.pot
+*.pyc
+*.pyo
+*.pyd
+*.egg-info/
+media/
+
+# IDE / editor files
+.idea/
+.vscode/
+*.swp
+*.swo
+
+# OS generated files
+.DS_Store
+Thumbs.db
