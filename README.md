@@ -1,10 +1,22 @@
 # Virtual Gaming Leaderboard API
 
-A Django REST Framework (DRF) project that provides a backend API for managing categories, games, players, and scores for a virtual gaming leaderboard.  
+A Django REST Framework (DRF) project that provides a backend API for managing categories, games, players, and scores for a virtual gaming leaderboard, Includes automated tests and manual Postman/Insomnia collections  
 
 The API supports full CRUD operations and includes authentication, testing, and pagination.  
 
+Key decisions:
+- Leaderboard calculation is encapsulated in `leaderboard/services.py` for testability and reuse.
+- Aggregations are performed via Django ORM and optimized with DB indexes on `Score(game, -value, timestamp)`.
+- Frontend demo available in `/frontend` (simple HTML + JS).
+
 ---
+
+## Tech stack
+- Python 3.12, Django 5.x, Django REST Framework  
+- PostgreSQL (development-ready; SQLite used for tests)  
+- pytest for tests  
+- Optional: Docker + docker-compose for local development
+
 
 ## Features
 - Manage **Categories** (e.g. Puzzle, Action, Strategy)
@@ -17,15 +29,25 @@ The API supports full CRUD operations and includes authentication, testing, and 
 
 ---
 
+
 ## Project Structure
-leaderboard_api/
-│── category/ # Category app (models, views, serializers, tests)
-│── games/ # Games app
-│── players/ # Players app
-│── scores/ # Scores app
-│── leaderboard/ # Leaderboard logic
-│── leaderboard_api/ # Main project folder (settings, urls)
-│── manage.py
+Virtual-Gaming-Leaderboard/
+│
+├── README.md
+├── requirements.txt
+├── leaderboard_api/
+│   ├── manage.py
+│   ├── leaderboard_api/
+│   ├── players/
+│   ├── scores/
+│   ├── games/
+│   ├── category/  
+│   └── leaderboard/
+│
+└── frontend/
+    ├── index.html
+    └── script.js
+
 
 
 
@@ -43,20 +65,50 @@ API Endpoints
 | Leaderboard | `/api/games/{game_id}/leaderboard/` | GET                     |
 
 
+## Quickstart (local)
+1. Clone
+```bash
+git clone https://github.com/bkay29/virtual-gaming-leaderboard-api.git
+cd virtual-gaming-leaderboard-api
+
+
+2. Create venv & install:
+'''bash
+python -m venv .venv
+source .venv/bin/activate
+pip install -r requirements.txt
+
+
+3. Create .env (see .env.example) with DB and SECRET_KEY, or use SQLite for quick runs.
+
+
+4. Run migrations and start:
+'''bash
+python manage.py migrate
+python manage.py runserver
+
+
+5. Demo Leaderboard:
+'''bash
+curl http://127.0.0.1:8000/api/games/1/leaderboard/?top=10
+
+
+Endpoints (examples)
+ - GET /api/players/ — list players
+ - POST /api/scores/ — add score (body: {player: id, game: id, value: 120})
+ - GET /api/games/{game_id}/leaderboard/?top=10 — top N players for a game
+ - GET /api/players/{id}/rank/ — (if implemented) returns player's rank and total.
+
 
 Testing
-Manual Testing (Postman / Insomnia)
-Tests CRUD for all endpoints.
+'''bash 
+pytest -q
 
 
-Tech Stack
-Python 3.12
-Django 5.x
-Django REST Framework
-PostgreSQL (or SQLite for tests)
-pytest/unittest (for automated testing)
+Live demo/rontend
+- Minimal frontend is available at /frontend/index.html (simple JS to call leaderboard endpoints). Can be deployed to GitHub Pages for quick live demo.
 
 
-Author
-Ednah Bridget Kakah
-Backend Developer 
+Author: Ednah Bridget Kakah
+
+
