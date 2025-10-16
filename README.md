@@ -42,7 +42,7 @@ Virtual-Gaming-Leaderboard/
 │   ├── scores/
 │   ├── leaderboard/
 │
-├── frontend/                   ← optional/minimal frontend folder
+├── frontend/                   ← optional frontend folder
 ├── requirements.txt
 └── README.md
 
@@ -123,12 +123,13 @@ Live demo/rontend
 Deployment
 API is ready for render or other production platforms
 
-Before deployment
+For deployment
 Set DEBUG=False
 Add Render domain to ALLOWED_HOSTS
 Use environment variables for:
  - SECRET_KEY
  - DATABASE_URL (Render PostgreSQL)
+
 Configure Gunicorn and create a Procfile:
 '''bash
 web: gunicorn leaderboard_api.wsgi
