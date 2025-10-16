@@ -33,20 +33,19 @@ Key decisions:
 ## Project Structure
 Virtual-Gaming-Leaderboard/
 │
-├── README.md
-├── requirements.txt
-├── leaderboard_api/
+├── leaderboard_api/            ← outer project folder (Django project root)
 │   ├── manage.py
-│   ├── leaderboard_api/
+│   ├── leaderboard_api/        ← inner config package (with settings.py, urls.py, wsgi.py)
+│   ├── category/
+│   ├── games/
 │   ├── players/
 │   ├── scores/
-│   ├── games/
-│   ├── category/  
-│   └── leaderboard/
+│   ├── leaderboard/
 │
-└── frontend/
-    ├── index.html
-    └── script.js
+├── frontend/                   ← optional/minimal frontend folder
+├── requirements.txt
+└── README.md
+
 
 
 
@@ -80,12 +79,25 @@ pip install -r requirements.txt
 
 
 3. Create .env (see .env.example) with DB and SECRET_KEY, or use SQLite for quick runs.
+SECRET_KEY=your-secret-key
+DEBUG=True
+ALLOWED_HOSTS=localhost,127.0.0.1
+DATABASE_URL=sqlite:///db.sqlite3
+
+you can locally using SQLite - no database setup required.
 
 
 4. Run migrations and start:
 '''bash
 python manage.py migrate
 python manage.py runserver
+
+Visit
+Home: http://127.0.0.1:8000/
+ - “Welcome to Virtual Gaming Leaderboard”
+Browsable API Root: http://127.0.0.1:8000/api/
+ - lists all available endpoints.
+DRF Login (optional): http://127.0.0.1:8000/api-auth/login/
 
 
 5. Demo Leaderboard:
@@ -108,7 +120,21 @@ pytest -q
 Live demo/rontend
 - Minimal frontend is available at /frontend/index.html (simple JS to call leaderboard endpoints). Can be deployed to GitHub Pages for quick live demo.
 
+Deployment
+API is ready for render or other production platforms
 
-Author: Ednah Bridget Kakah
+Before deployment
+Set DEBUG=False
+Add Render domain to ALLOWED_HOSTS
+Use environment variables for:
+ - SECRET_KEY
+ - DATABASE_URL (Render PostgreSQL)
+Configure Gunicorn and create a Procfile:
+'''bash
+web: gunicorn leaderboard_api.wsgi
+
+Static files are handled by WhiteNoise (configured)
 
 
+Author: Bkay29
+Built with Django, powered by purpose.
